@@ -1,5 +1,3 @@
-Here’s a structured solution for each of the 14 JavaScript exercise tasks under the "Local Community Event Portal" project theme. Each task is explained with code snippets and purpose, suitable for integration into a real portal.
-
 1. JavaScript Basics & Setup
 HTML:
 
@@ -236,7 +234,5 @@ $('#registerBtn').click(function () {
 $('.event-card').fadeIn();
 $('.event-card').fadeOut();
 Framework Benefit:
-
 Using React or Vue improves state management, component-based architecture, and scalability for larger, complex applications.
 
-Would you like this packaged as a project repo template or separated into files for easier implementation?
