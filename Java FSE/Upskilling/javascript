@@ -1,0 +1,294 @@
+1. JavaScript Basics & Setup
+HTML:
+
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Community Portal</title>
+</head>
+<body>
+  <h1>Local Community Events</h1>
+  <script src="main.js"></script>
+</body>
+</html>
+main.js:
+
+javascript
+Copy
+Edit
+console.log("Welcome to the Community Portal");
+
+window.onload = function () {
+  alert("Page is fully loaded");
+};
+2. Syntax, Data Types, and Operators
+javascript
+Copy
+Edit
+const eventName = "Music Festival";
+const eventDate = "2025-06-20";
+let availableSeats = 50;
+
+console.log(`Event: ${eventName}, Date: ${eventDate}, Seats: ${availableSeats}`);
+
+availableSeats--; // On registration
+console.log(`Seats left after registration: ${availableSeats}`);
+3. Conditionals, Loops, and Error Handling
+javascript
+Copy
+Edit
+const events = [
+  { name: "Music Fest", date: "2025-06-20", seats: 10 },
+  { name: "Tech Meetup", date: "2023-10-10", seats: 0 }
+];
+
+events.forEach(event => {
+  const eventDate = new Date(event.date);
+  const today = new Date();
+
+  if (eventDate > today && event.seats > 0) {
+    console.log(`Upcoming Event: ${event.name}`);
+  } else {
+    console.log(`Event ${event.name} is unavailable`);
+  }
+});
+
+function register(event) {
+  try {
+    if (event.seats > 0) {
+      event.seats--;
+      console.log("Registration successful!");
+    } else {
+      throw new Error("No seats left");
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+4. Functions, Scope, Closures, Higher-Order Functions
+javascript
+Copy
+Edit
+function addEvent(name, date, category, seats) {
+  return { name, date, category, seats };
+}
+
+function registerUser(event) {
+  if (event.seats > 0) {
+    event.seats--;
+    return "Registered!";
+  }
+  return "Full!";
+}
+
+function filterEventsByCategory(events, category) {
+  return events.filter(e => e.category === category);
+}
+
+// Closure
+function categoryTracker() {
+  let count = 0;
+  return function () {
+    count++;
+    return count;
+  };
+}
+
+const musicCounter = categoryTracker();
+console.log(musicCounter()); // 1
+5. Objects and Prototypes
+javascript
+Copy
+Edit
+function Event(name, date, seats) {
+  this.name = name;
+  this.date = date;
+  this.seats = seats;
+}
+
+Event.prototype.checkAvailability = function () {
+  return this.seats > 0;
+};
+
+const event1 = new Event("Coding Bootcamp", "2025-07-10", 20);
+
+console.log(Object.entries(event1)); // Key-value pairs
+6. Arrays and Methods
+javascript
+Copy
+Edit
+let communityEvents = [];
+
+communityEvents.push({ name: "Yoga Class", category: "Health" });
+
+const musicEvents = communityEvents.filter(e => e.category === "Music");
+
+const cards = communityEvents.map(e => `Event: ${e.name}`);
+console.log(cards);
+7. DOM Manipulation
+javascript
+Copy
+Edit
+const eventContainer = document.querySelector("#events");
+
+function displayEvents(events) {
+  eventContainer.innerHTML = ""; // Clear
+  events.forEach(e => {
+    const card = document.createElement("div");
+    card.textContent = `${e.name} - ${e.date}`;
+    eventContainer.appendChild(card);
+  });
+}
+8. Event Handling
+javascript
+Copy
+Edit
+document.querySelectorAll(".registerBtn").forEach(btn => {
+  btn.onclick = () => alert("Registered!");
+});
+
+document.querySelector("#categoryFilter").onchange = function (e) {
+  const category = e.target.value;
+  displayEvents(filterEventsByCategory(communityEvents, category));
+};
+
+document.querySelector("#searchInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    const query = e.target.value;
+    const filtered = communityEvents.filter(event =>
+      event.name.toLowerCase().includes(query.toLowerCase())
+    );
+    displayEvents(filtered);
+  }
+});
+9. Async JS, Promises, Async/Await
+javascript
+Copy
+Edit
+function fetchEvents() {
+  document.querySelector("#loading").style.display = "block";
+  fetch("https://mockapi.io/events")
+    .then(res => res.json())
+    .then(data => {
+      displayEvents(data);
+    })
+    .catch(err => console.error(err))
+    .finally(() => {
+      document.querySelector("#loading").style.display = "none";
+    });
+}
+
+// Using async/await
+async function fetchEventsAsync() {
+  try {
+    document.querySelector("#loading").style.display = "block";
+    const res = await fetch("https://mockapi.io/events");
+    const data = await res.json();
+    displayEvents(data);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    document.querySelector("#loading").style.display = "none";
+  }
+}
+10. Modern JavaScript Features
+javascript
+Copy
+Edit
+const greetUser = (name = "Guest") => `Welcome, ${name}!`;
+
+const event = { name: "Meetup", date: "2025-07-10", seats: 30 };
+const { name, date } = event;
+
+const allEvents = [...communityEvents]; // Spread to clone
+11. Working with Forms
+html
+Copy
+Edit
+<form id="regForm">
+  <input name="name" />
+  <input name="email" />
+  <select name="eventName">
+    <option>Music Fest</option>
+  </select>
+  <button type="submit">Register</button>
+</form>
+javascript
+Copy
+Edit
+document.querySelector("#regForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const { name, email, eventName } = e.target.elements;
+
+  if (!name.value || !email.value) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  console.log(`User ${name.value} registered for ${eventName.value}`);
+});
+12. AJAX & Fetch API
+javascript
+Copy
+Edit
+function sendRegistration(data) {
+  setTimeout(() => {
+    fetch("https://mockapi.io/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(res => res.json())
+      .then(() => alert("Registration successful!"))
+      .catch(() => alert("Error during registration"));
+  }, 1000); // Simulated delay
+}
+13. Debugging and Testing
+javascript
+Copy
+Edit
+console.log("Submitting form...");
+
+function debugRegistration(data) {
+  try {
+    fetch("https://mockapi.io/register", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log("Response:", json);
+      });
+  } catch (err) {
+    console.error("Debug error:", err);
+  }
+}
+Use Chrome DevTools:
+
+Console logs
+
+Network tab (check request/response)
+
+Add breakpoints in Sources tab
+
+14. jQuery and JS Frameworks
+html
+Copy
+Edit
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+javascript
+Copy
+Edit
+$('#registerBtn').click(function () {
+  alert("Registered with jQuery!");
+});
+
+$('.event-card').fadeIn();
+$('.event-card').fadeOut();
+Framework Benefit:
+
+Using React or Vue improves state management, component-based architecture, and scalability for larger, complex applications.
